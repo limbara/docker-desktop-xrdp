@@ -14,7 +14,7 @@ cd docker-desktop-xrdp
 You can then run the `docker build` command build or with the supplied script:
 
 ```bash
-./build
+./build.sh
 ```
 
 ## Running local images with scripts
@@ -22,11 +22,11 @@ You can then run the `docker build` command build or with the supplied script:
 To start:
 
 ```bash
-./start
+./start.sh
 ```
 
 To stop:
 
 ```bash
-./stop
+./stop.sh
 ```
