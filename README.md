@@ -1,6 +1,13 @@
 # docker-xrdp
 Remote access to docker container using [xrdp](http://xrdp.org) running on ubuntu
 
+use the following default user account details:
+
+```bash
+Username: ubuntu
+Password: ubuntu
+```
+
 ## Building docker-desktop-xrdp on your own machine
 
 First, clone the GitHub repository:
