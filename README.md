@@ -1,7 +1,22 @@
 # docker-xrdp
 Remote access to docker container using [xrdp](http://xrdp.org) running on ubuntu
 
-use the following default user account details:
+## To run the container
+
+```bash
+docker run --detach \
+    --rm \
+    --hostname="$(hostname)" \
+    --publish="3389:3389/tcp" \
+    --name="ubuntu-docker-desktop-xrdp" \
+    limbara/ubuntu-docker-desktop-xrdp:latest
+```
+
+## Connect with an RDP client
+
+For the hostname, use `localhost:3389` if the container is hosted on the same machine you're running your Remote Desktop client on and for remote connections use the name or IP address of the machine you are connecting to also it will require TCP port 3389 to be exposed through the firewall.
+
+To log in, use the following default user account details:
 
 ```bash
 Username: ubuntu
