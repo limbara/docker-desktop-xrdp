@@ -1,0 +1,67 @@
+name: Docker Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+env:
+  DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_USERNAME }}/ubuntu-docker-desktop-xrdp
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+jobs:
+  push_other_images:
+    name: Push images to dockerhub
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        codename: [jammy, focal]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+      - name:  Build & Push ${{ matrix.codename }} tag to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: audio
+          build-args: TAG=${{ matrix.codename }}
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ github.ref_name }}-${{ matrix.codename }}
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ matrix.codename }}
+          platforms: linux/amd64,linux/arm64
+  push_latest_image:
+    name: Push latest image to dockerhub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+      - name: Build & Push latest tag to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          target: audio
+          build-args: TAG=jammy
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:latest
+          platforms: linux/amd64,linux/arm64
