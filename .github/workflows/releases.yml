@@ -66,8 +66,8 @@ jobs:
             ${{ env.DOCKERHUB_REPOSITORY }}:latest
           platforms: linux/amd64,linux/arm64
       - name: Docker Hub Description
-      uses: peter-evans/dockerhub-description@v4
-      with:
-        username: ${{ env.DOCKERHUB_USERNAME }}
-        password: ${{ env.DOCKERHUB_TOKEN }}
-        repository: ${{ env.DOCKERHUB_REPOSITORY }}
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+          repository: ${{ env.DOCKERHUB_REPOSITORY }}
