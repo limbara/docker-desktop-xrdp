@@ -42,7 +42,7 @@ jobs:
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ matrix.codename }}
           platforms: linux/amd64,linux/arm64
   push_latest_image:
-    name: Push latest image to dockerhub
+    name: Push latest image and update description to dockerhub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -65,3 +65,9 @@ jobs:
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:latest
           platforms: linux/amd64,linux/arm64
+      - name: Docker Hub Description
+      uses: peter-evans/dockerhub-description@v4
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ env.DOCKERHUB_TOKEN }}
+        repository: ${{ env.DOCKERHUB_REPOSITORY }}
