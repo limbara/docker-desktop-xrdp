@@ -1,0 +1,39 @@
+name: CI Test Build Release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  
+env:
+  DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_USERNAME }}/ubuntu-docker-desktop-xrdp
+  TEST_TAG: ${{ vars.DOCKERHUB_USERNAME }}/ubuntu-docker-desktop-xrdp:test
+
+jobs:
+  test:
+    name: Test Build Images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        codename: [jammy, focal]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.codename }}
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          target: audio
+          build-args: TAG=${{ matrix.codename }}
+          tags: ${{ env.TEST_TAG }}
+      - name: Test
+        run: |
+          docker run --rm ${{ env.TEST_TAG }}
